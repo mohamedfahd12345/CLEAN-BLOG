@@ -1,0 +1,84 @@
+﻿@model User
+
+@{
+     BlogContext db = new BlogContext();
+        var list_blogs=db.Posts.Where(x=>x.UserId==Model.UserId).ToList();
+          var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);// will give the user's userId
+}
+
+
+
+<!-- Page Header-->
+        <header class="masthead" style="background-image: url('/assets/img/contact-bg.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="page-heading">
+                            <h1>Welcome</h1>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+<!-- Page Header-->
+<div>
+    @{
+         var find_user = db.Followers.Where(x => x.ChildId == userId && x.FatherId == Model.UserId).FirstOrDefault();
+    }
+    <form asp-controller="user" asp-action="follow">
+    <input type="hidden" asp-for="UserId">
+        @if (find_user == null)
+        {
+            <input type="submit"  value="Follow @Model.Followers" class="btn btn-primary" />
+        }
+        else
+        {
+            <input type="submit"  value="Following @Model.Followers" class="btn btn-primary" />
+        }
+    </form>
+</div>
+<br/>
+<!-- follow Header-->
+<!-- follow Header-->
+
+
+<div class="post-preview">
+    <H1>Name : @Model.UserName</H1>
+    <H1>About : @Model.Description</H1>
+</div>
+
+<div>
+    <h1>His Blogs</h1>
+</div>
+
+ <!-- Main Content-->
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                @foreach(var item in list_blogs)
+                {
+                     <!-- Post preview-->
+                    <div class="post-preview">
+                        <a href="/Home/post/@item.Id">
+                            <h2 class="post-title">@item.Header</h2>
+                        </a>
+                        <p class="post-meta">
+                            
+                            
+                            on @item.Date
+                        </p>
+                        <p class="post-meta">
+                            Category:
+                           @item.CategoryName
+                        </p>
+                    </div>
+                    <!-- Divider-->
+                    <hr class="my-4" />
+                }
+                <!-- Post preview-->
+
+</div>
+  </div> 
+   </div>

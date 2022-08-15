@@ -1,0 +1,187 @@
+﻿@model Post 
+
+@{
+     BlogContext db = new BlogContext();
+            var item = db.Posts.Where(x => x.Id==Model.Id).FirstOrDefault();
+            item.Views++;
+            db.Posts.Update(item);
+            db.SaveChanges();
+}
+
+<!-- Page Header-->
+        <header class="masthead" style="background-image: url('@Model.Photo')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="post-heading">
+                            <h1>@Model.Header</h1>
+                            <span class="meta">
+                                Posted by
+                              @{
+                                  
+                                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);// will give the user's userId
+                                var temp_user = db.Users.Where(x => x.UserId ==Model.UserId).FirstOrDefault();
+                                <a href="/user/Index/@temp_user.UserId">@temp_user.UserName</a>
+                            }
+                                on @Model.Date
+                            </span>
+                            <span class="meta">
+                                Category :
+                              @Model.CategoryName
+                            </span>
+                            <span class="meta">
+                                Total Views :
+                              @Model.Views
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Post Content-->
+
+
+         <!-- saved-->
+         <span >
+                @{
+                    var list_saved = db.Saveds.Where(x => x.UserId == userId).ToList();
+                }
+             <form asp-controller="LIST" asp-action="Index">
+              <label asp-for="CategoryName">SAVED :</label>
+               <select style="height: 10px width: 100px;" asp-for="CategoryName" class="form-select" aria-label="Default select example">
+                   @foreach(var item_l in list_saved)
+                {
+                    <option value="@item_l.Name">@item_l.Name</option>
+               
+                }
+                </select>
+                <input  asp-for="Description" type="text" value="" placeholder="create new list" style="margin:10px 0px 10px " />
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                <input type="submit" value="ADD" class="btn btn-primary" />
+            </div>
+            </form>
+         </span>
+        <!-- saved-->
+      
+
+
+          <!-- Post Content-->
+        <article class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <p>
+                            @Model.Description
+                        </p>
+                       <hr></hr>
+                       <!--like-->
+                       <div>
+                           <form asp-controller="likes" asp-action="like">
+                            <input type="hidden" asp-for="Id">
+                            <input type="submit"  value="like @Model.Liks" class="btn btn-primary" />
+                            @{var find_like = db.Likes.Where(x => x.UserId == userId && x.PostId == Model.Id).FirstOrDefault();}
+                        @if (find_like == null)
+                        {
+                            <i class="far fa-thumbs-up"></i>
+                        }
+                        else
+                        {
+                            <span id="icon"><i class="fas fa-thumbs-up"></i></span>
+                        }
+
+                             </form>
+                       </div>
+                       <!--like-->
+                       <br></br>
+
+                       <h1 style="margin:50px 0px 20px; color:red; font-size:50px">Comments:</h1>
+                         <form asp-action="comment">
+                           <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+                             <div class="form-group">
+                             <label asp-for="Header" class="control-label">Add Comment</label>
+                             <input asp-for="Header" value="" class="form-control" />
+                             <span asp-validation-for="Header" class="text-danger"></span>
+                             </div>
+                             <input type="hidden" asp-for="UserId"></input>
+                             <input type="hidden" asp-for="Id"></input>
+                            
+                             <div class="form-group">
+                              <input type="submit"  value="Add" class="btn btn-primary" />
+                             </div>
+                             <div/>
+                         </form>
+                         <hr></hr>
+                         <div>
+                    @{
+                        
+                        var list_comments = db.Comments.Where(x => x.PostId == Model.Id).ToList();
+                        foreach(var it in list_comments)
+                        {
+                            <div>
+                            <h4>
+                                 @it.Decription
+                            </h4>
+                             <span class="meta">
+                                Added by :
+                                    @{
+                                        var user_comment = db.Users.Where(x =>x.UserId== it.UserId).FirstOrDefault();
+                                        <a href="/user/Index/@user_comment.UserId">@user_comment.UserName</a>
+                                    }
+                                
+                            </span>
+                            </div>
+                            <hr></hr>
+                        }
+
+                    }
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</article>
+<!-- Footer-->
+@*  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*@
+<div class="container px-4 px-lg-5">
+<h1 style="margin: 100px 100px 30px 150px; color: blue; font-size:60px">Recommended BLOGS</h1>
+</div>
+<hr/>
+<!--related blogs-->
+@{
+    var recommend_blogs = db.Posts.Where(x => x.CategoryId== Model.CategoryId).OrderByDescending(x => x.Liks).Take(5);
+}
+
+ <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                
+                @foreach(var recommed in recommend_blogs)
+                {
+           
+                <!-- Post preview-->
+                    <div class="post-preview">
+                        <a href="/Home/post/@recommed.Id">
+                            <h2 class="post-title">@recommed.Header</h2>
+                        </a>
+                        <p class="post-meta">
+                            
+                            on @recommed.Date
+                        </p>
+                        <p class="post-meta">
+                            Category:
+                           @recommed.CategoryName
+                        </p>
+                    </div>
+                <!-- Divider-->
+                <hr class="my-4" />
+                
+            }
+                <!-- Post preview-->
+
+</div>
+</div>
+</div>

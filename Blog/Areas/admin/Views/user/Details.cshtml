@@ -1,0 +1,58 @@
+﻿@model User
+
+@*@{
+     BlogContext db = new BlogContext();
+        var list_blogs=db.Posts.Where(x=>x.UserId==Model.UserId).ToList();
+
+}
+*@
+
+
+<!-- Page Header-->
+        <header class="masthead" style="background-image: url('/assets/img/contact-bg.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="page-heading">
+                            <h1>Welcome</h1>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+<!-- Page Header-->
+<div class="post-preview">
+    <H1>Name : @Model.UserName</H1>
+    <H1>About : @Model.Description</H1>
+    <h1>Followers:@Model.Followers </h1>
+</div>
+
+<div>
+    <h1>His Blogs</h1>
+</div>
+
+ <div>
+         
+           <hr></hr>
+           <hr></hr>
+
+            @{
+                BlogContext db = new BlogContext();
+                var item = db.Posts.Where(x => x.UserId==Model.UserId).ToList();
+                foreach(var it in item)
+                {
+                     <div class="post-preview">
+                        <a href="/Home/post/@it.Id">
+                            <h2 class="post-title">@it.Header</h2>
+                        </a>
+                        <div class="col-12">
+                          <a href="/admin/user/Delete_post/@it.Id" class="btn btn-primary">Delete</a>
+                        </div>
+                    </div>
+                    <hr></hr>
+                }
+            }
+
+        </div>

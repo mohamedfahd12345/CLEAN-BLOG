@@ -1,0 +1,106 @@
+﻿@model Blog.Models.User
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Page Header-->
+        <header class="masthead" style="background-image: url('/assets/img/contact-bg.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="page-heading">
+                            <h1>Welcome</h1>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+       
+        <a href="/LIST/ALLLISTS">
+            MY SAVED
+            <span >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmarks" viewBox="0 0 16 16">
+                  <path d="M2 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L7 13.101l-4.223 2.815A.5.5 0 0 1 2 15.5V4zm2-1a1 1 0 0 0-1 1v10.566l3.723-2.482a.5.5 0 0 1 .554 0L11 14.566V4a1 1 0 0 0-1-1H4z"/>
+                  <path d="M4.268 1H12a1 1 0 0 1 1 1v11.768l.223.148A.5.5 0 0 0 14 13.5V2a2 2 0 0 0-2-2H6a2 2 0 0 0-1.732 1z"/>
+                </svg>
+            </span>
+        </a>
+     <br></br>
+     <a href="/myfollower/Index">
+         <h4>MY FOLLOWERS . @Model.Followers</h4>
+     </a>
+<a href="/MY/create">
+    <h4>
+        Create New Post
+    </h4>
+</a>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+          
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label">Your Name</label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">About</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Photo" class="control-label">Photo Link</label>
+                <input asp-for="Photo" class="form-control" />
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+            
+           
+            <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-primary" />
+            </div>
+        </form>
+        <hr/>
+           <br></br>
+        <div>
+           <h2> Your Blogs : </h2>
+           <hr></hr>
+           <hr></hr>
+
+            @{
+                BlogContext db = new BlogContext();
+                var item = db.Posts.Where(x => x.UserId==Model.UserId).ToList();
+                foreach(var it in item)
+                {
+                     <div class="post-preview">
+                        <a href="/Home/post/@it.Id">
+                            <h2 class="post-title">@it.Header</h2>
+                        </a>
+                        <div class="col-12">
+                         <a href="/MY/edit/@it.Id" class="btn btn-primary">Edit</a>
+                          <a href="/MY/delete/@it.Id" class="btn btn-primary">Delete</a>
+                        </div>
+                    </div>
+                    <hr></hr>
+                }
+            }
+
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,67 @@
+﻿@model List<Post>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+      <!-- Page Header-->
+        <header class="masthead" style="background-image: url('/assets/img/home-bg.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>Clean Blog</h1>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        </div>
+        <!-- Main Content-->
+      
+        <div>
+            <a href="/Home/newest"  class="link-primary">Newest to Oldest    .</a>
+            
+            <a href="/Home/mostviewed"  class="link-primary">.   Most Views</a>
+
+           <a href="/Home/mostlike"  class="link-primary">. .  Most Likes</a>
+        </div>
+    
+         <!-- Main Content-->
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                @foreach(var item in Model)
+                {
+                     <!-- Post preview-->
+                    <div class="post-preview">
+                        <a href="/Home/post/@item.Id">
+                            <h2 class="post-title">@item.Header</h2>
+                        </a>
+                        <p class="post-meta">
+                            Posted by
+                            @{
+                                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);// will give the user's userId
+                                BlogContext db = new BlogContext();
+                                var temp_user = db.Users.Where(x => x.UserId ==item.UserId).FirstOrDefault();
+                                <a href="/user/Index/@temp_user.UserId">@temp_user.UserName</a>
+                            }
+                            on @item.Date
+                        </p>
+                        <p class="post-meta">
+                            Category:
+                           @item.CategoryName
+                        </p>
+                    </div>
+                    <!-- Divider-->
+                    <hr class="my-4" />
+                }
+                <!-- Post preview-->
+
+</div>
+  </div>
+        </div>
+
+
+        

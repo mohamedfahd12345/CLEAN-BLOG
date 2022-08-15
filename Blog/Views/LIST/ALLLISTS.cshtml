@@ -1,0 +1,28 @@
+﻿@model List<Saved>
+
+
+<div class="text-center">
+      <!-- Page Header-->
+        <header class="masthead" style="background-image: url('/assets/img/home-bg.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>YOUR LISTS</h1>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content-->
+        </div>
+        <h1>YOUR LISTS</h1>
+        @foreach(var item in Model){
+            <div class="card">
+                  <h5 class="card-header">@item.Name</h5>
+                  <div class="card-body">
+                    <a href="/LIST/ONELIST/@item.Id" class="btn btn-primary">SEE MORE</a>
+                  </div>
+                </div>
+         }
