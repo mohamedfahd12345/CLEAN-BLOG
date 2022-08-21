@@ -25,11 +25,10 @@ h.	View The most liked blogs: System allows user to View The most liked blogs .<
 i.  View The most viewed blogs: System allows user to  View The most viewed blogs .<br>
 j.  View another user :  System allows user to  View another user with all details about this user,his blogs, and  his followers.<br>
 k.  Follow: System allows user to  follow another user .<br>
-  
+l.  View his list saved :  System allows user to  View his list saved  and each list has list blogs. <br>
 2.	Admin:<br>
 a.	View Users: Admin can view all users with their details and thier blogs.<br>
 b.	View Blogs: System allows admin to view all blogs and admin can delete any blogs he wants .<br>
-c.	
 <br>
 </p>
 <hr/>
