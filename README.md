@@ -2,7 +2,7 @@
 <h1>Descripition </h1>
 •It is like medium website <br/>
 •It allows the user to register, log in, log out, create blogs, vote on existing blogs, add
-comments, save the blog he likes,edit or delete his blog, see most views blogs, see most likes blogs and see categories.
+comments, save the blog he likes,edit or delete his blog, see most views blogs, see most likes blogs and see categories.<br/>
 •It allows the admin to see all users and their blogs.
 It is like a medium website.
 
